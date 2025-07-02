@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SolicitudRepository extends JpaRepository<Solicitudes, Integer> {
+    Page<Solicitudes> findByUsuario_Id(Integer usuarioId, Pageable pageable);
 }

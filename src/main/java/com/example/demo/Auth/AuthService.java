@@ -38,15 +38,17 @@ public class AuthService {
                 .build();
     }
 
+    // src/main/java/com/example/demo/Auth/AuthService.java
+
     public AuthResponse register(RegisterRequest request) {
         User.UserBuilder userBuilder = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
-                .role(Role.valueOf(request.getRole()));
+                .role(Role.valueOf(String.valueOf(request.getRole())));
 
-        if (request.getAreaNombre() != null) {
+        if (request.getAreaNombre() != null && !request.getAreaNombre().isEmpty()) {
             Area area = areaRepository.findById(request.getAreaNombre())
                     .orElseThrow(() -> new IllegalArgumentException("Area not found"));
             userBuilder.area(area);

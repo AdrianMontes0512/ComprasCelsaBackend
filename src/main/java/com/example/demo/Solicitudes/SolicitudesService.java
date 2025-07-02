@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SolicitudesService {
@@ -19,12 +21,14 @@ public class SolicitudesService {
     private final AreaRepository areaRepository;
     private final GmailService gmailService;
 
+
     public Solicitudes crearSolicitud(SolicitudRequestDto dto) {
         User usuario = userRepository.findById(dto.getUsuarioId().intValue())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         Solicitudes solicitud = Solicitudes.builder()
                 .prioridad(dto.getPrioridad())
+                .CentroCosto(dto.getCentrocosto())
                 .sp(dto.getSp())
                 .descripcion(dto.getDescripcion())
                 .cantidad(dto.getCantidad())
@@ -50,6 +54,11 @@ public class SolicitudesService {
         return mapToDto(solicitud);
     }
 
+    public Page<SolicitudByIdResponseDto> getSolicitudesByUsuarioId(Integer usuarioId, Pageable pageable) {
+        return solicitudRepository.findByUsuario_Id(usuarioId, pageable)
+                .map(this::mapToDto);
+    }
+
     public Page<SolicitudByIdResponseDto> getTodasLasSolicitudes(Pageable pageable) {
         return solicitudRepository.findAll(pageable)
                 .map(this::mapToDto);
@@ -73,6 +82,8 @@ public class SolicitudesService {
         Solicitudes solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
+        if (dto.getOrdenCompra() != null) solicitud.setOrdenCompra(dto.getOrdenCompra());
+        if (dto.getCentrocosto() != null) solicitud.setCentroCosto(dto.getCentrocosto());
         if (dto.getPrioridad() != null) solicitud.setPrioridad(dto.getPrioridad());
         if (dto.getSp() != null) solicitud.setSp(dto.getSp());
         if (dto.getDescripcion() != null) solicitud.setDescripcion(dto.getDescripcion());

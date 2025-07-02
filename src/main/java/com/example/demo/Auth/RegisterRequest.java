@@ -1,5 +1,6 @@
 package com.example.demo.Auth;
 
+import com.example.demo.User.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,6 @@ public class RegisterRequest {
     String firstname;
     String lastname;
     String country;
-    String role;
+    Role role;
     String areaNombre;
 }

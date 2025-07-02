@@ -30,10 +30,15 @@ public class SolicitudController {
         Solicitudes solicitud = solicitudesService.crearSolicitud(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitud);
     }
-
-
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Page<SolicitudByIdResponseDto>> getSolicitudesByUsuarioId(
+            @PathVariable Integer usuarioId,
+            @PageableDefault(size = 3) Pageable pageable) {
+        Page<SolicitudByIdResponseDto> solicitudes = solicitudesService.getSolicitudesByUsuarioId(usuarioId, pageable);
+        return ResponseEntity.ok(solicitudes);
+    }
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerSolicitud(@PathVariable Integer id) {
+    public ResponseEntity<?> getSolicitudById(@PathVariable Integer id) {
         return ResponseEntity.ok(solicitudesService.getSolicitudById(id));
     }
     @GetMapping

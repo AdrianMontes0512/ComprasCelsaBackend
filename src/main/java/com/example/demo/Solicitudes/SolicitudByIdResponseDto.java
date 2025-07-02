@@ -14,4 +14,5 @@ public class SolicitudByIdResponseDto {
     private Moneda moneda;
     private Estado estado;
     private Integer usuarioId;
+    private String ordenCompra;
 }

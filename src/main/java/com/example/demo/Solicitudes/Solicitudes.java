@@ -20,6 +20,9 @@ public class Solicitudes {
     Integer id;
 
     @Column(nullable = false)
+    String CentroCosto;
+
+    @Column(nullable = false)
     Prioridad prioridad;
 
     @Column(nullable = false)
@@ -43,7 +46,11 @@ public class Solicitudes {
     @Column(nullable = false)
     Estado estado;
 
+    @Column(nullable = true)
+    String OrdenCompra;
+
     @Lob
+    @Column(nullable = true)
     private byte[] imageData;
 
     @ManyToOne

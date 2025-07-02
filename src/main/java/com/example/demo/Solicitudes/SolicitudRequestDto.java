@@ -11,6 +11,7 @@ import lombok.Data;
 public class SolicitudRequestDto {
     private Prioridad prioridad;
     private SP sp;
+    private String centrocosto;
     private String descripcion;
     private String cantidad;
     private String precio;
@@ -19,4 +20,5 @@ public class SolicitudRequestDto {
     private Estado estado;
     private Integer usuarioId;
     private byte[] imageData;
+    private String ordenCompra=""; // Cambiado a String para que coincida con el tipo de dato en la entidad
 }
