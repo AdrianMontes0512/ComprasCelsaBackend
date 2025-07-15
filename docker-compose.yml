@@ -11,7 +11,7 @@ services:
     networks:
       - spring-network
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
 
   springboot-app:
     build: .
@@ -29,6 +29,3 @@ services:
 
 networks:
   spring-network:
-
-volumes:
-  pgdata:
