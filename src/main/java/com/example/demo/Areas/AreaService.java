@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,5 +51,12 @@ public class AreaService {
 
         area.setJefe(jefeOpt.get());
         return areaRepository.save(area);
+    }
+
+    public List<String> getAllAreasNombre() {
+        return areaRepository.findAll()
+                .stream()
+                .map(Area::getNombreArea)
+                .toList();
     }
 }

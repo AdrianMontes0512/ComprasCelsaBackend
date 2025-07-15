@@ -73,10 +73,8 @@ public class SolicitudController {
         List<SolicitudByIdResponseDto> solicitudesFiltradas = new ArrayList<>();
 
         for (Solicitudes solicitud : todasLasSolicitudes.getContent()) {
-            Double montoEnSoles = solicitudesService.convertirAMontoEnSoles(solicitud.getPrecio(), solicitud.getMoneda());
-            Area areaDestino = solicitudesService.determinarAreaDestino(montoEnSoles, solicitud.getUsuario());
-
-            if (areaDestino.equals(jefe.getArea())) {
+            Area areaDestino = solicitudesService.determinarAreaDestino(solicitud);
+            if (areaDestino.getJefe() != null && areaDestino.getJefe().getId().equals(jefe.getId())) {
                 solicitudesFiltradas.add(solicitudesService.getSolicitudById(solicitud.getId()));
             }
         }

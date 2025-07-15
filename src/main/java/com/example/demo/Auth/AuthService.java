@@ -61,4 +61,8 @@ public class AuthService {
                 .token(jwtService.getToken(user))
                 .build();
     }
+
+    public boolean isTokenValid(String token) {
+        return jwtService.isTokenValid(token);
+    }
 }

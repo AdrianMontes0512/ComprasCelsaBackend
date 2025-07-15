@@ -22,4 +22,9 @@ public class AreaController {
                                         @RequestBody AreaRequestDto dto) {
         return ResponseEntity.ok(areaService.updateArea(nombreArea, dto));
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllAreasNombre() {
+        return ResponseEntity.ok(areaService.getAllAreasNombre());
+    }
 }

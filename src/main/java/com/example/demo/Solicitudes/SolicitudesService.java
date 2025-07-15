@@ -39,8 +39,7 @@ public class SolicitudesService {
                 .usuario(usuario)
                 .imageData(dto.getImageData())
                 .build();
-        Double montoEnSoles = convertirAMontoEnSoles(dto.getPrecio(), dto.getMoneda());
-        Area areaDestino = determinarAreaDestino(montoEnSoles, usuario);
+        Area areaDestino = determinarAreaDestino(solicitud);
 
         enviarNotificacionAUsuario(areaDestino.getJefe(), solicitud);
 
@@ -101,38 +100,12 @@ public class SolicitudesService {
 
         return solicitudRepository.save(solicitud);
     }
-    public Double convertirAMontoEnSoles(String precio, Moneda moneda) {
-        double precioNumerico = Double.parseDouble(precio);
-        switch (moneda) {
-            case Dolares:
-                return precioNumerico * 3.7;  // Convertir USD a Soles
-            case Euros:
-                return precioNumerico * 4.2;  // Convertir EUR a Soles
-            case Soles:
-                return precioNumerico;  // Ya está en Soles
-            default:
-                throw new RuntimeException("Moneda no soportada");
-        }
+    public Area determinarAreaDestino(Solicitudes solicitud) {
+        // CentroCosto is the AreaId
+        String areaId = solicitud.getCentroCosto();
+        return areaRepository.findById(areaId)
+                .orElseThrow(() -> new RuntimeException("Área no encontrada para el Centro de Costo: " + areaId));
     }
-    public Area determinarAreaDestino(Double montoEnSoles,User usuario) {
-        if (montoEnSoles <= 185000) {
-            // Rango: Jefe de Área
-            return usuario.getArea();
-        } else if (montoEnSoles > 185000 && montoEnSoles <= 740000) {
-            // Rango: Gerencia General
-            return obtenerAreaPorNombre("Gerencia General");
-        } else if (montoEnSoles > 740000) {
-            // Rango: Comité de Compras
-            return obtenerAreaPorNombre("Comité de Compras");
-        } else {
-            throw new RuntimeException("Monto fuera de rango");
-        }
-    }
-    private Area obtenerAreaPorNombre(String nombreArea) {
-        return areaRepository.findById(nombreArea)
-                .orElseThrow(() -> new RuntimeException("Área no encontrada"));
-    }
-
     public void enviarNotificacionAUsuario(User jefeArea, Solicitudes solicitud) {
         String subject = "📝 Solicitud de compra requiere su aprobación";
         String body = String.format("""

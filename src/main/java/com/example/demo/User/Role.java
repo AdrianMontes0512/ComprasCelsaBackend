@@ -4,5 +4,6 @@ public enum Role {
     ADMIN,
     Empleado,
     Compras,
-    JefeArea
+    JefeArea,
+    TMLIMA
 }

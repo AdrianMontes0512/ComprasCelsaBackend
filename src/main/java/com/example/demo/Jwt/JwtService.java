@@ -74,5 +74,14 @@ public class JwtService {
     {
         return getExpiration(token).before(new Date());
     }
-    
+
+    public boolean isTokenValid(String token) {
+        try {
+            getAllClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }
