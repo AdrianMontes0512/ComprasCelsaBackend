@@ -20,5 +20,8 @@ public class SolicitudRequestDto {
     private Estado estado;
     private Integer usuarioId;
     private byte[] imageData;
-    private String ordenCompra=""; // Cambiado a String para que coincida con el tipo de dato en la entidad
+    private String ordenCompra="";
+    private String motivo;
+    private String familia;
+    private String subFamilia;
 }

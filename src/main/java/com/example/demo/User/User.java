@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.example.demo.Areas.Area;
 import com.example.demo.Solicitudes.Solicitudes;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -75,6 +76,7 @@ public class User implements UserDetails {
     private Area area;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Solicitudes> solicitudes = new ArrayList<>();
 
     @Override

@@ -49,6 +49,15 @@ public class Solicitudes {
     @Column(nullable = true)
     String OrdenCompra;
 
+    @Column(nullable = false)
+    String Motivo;
+
+    @Column(nullable = false)
+    String Familia;
+
+    @Column(nullable = false)
+    String SubFamilia;
+
     @Lob
     @Column(nullable = true)
     private byte[] imageData;

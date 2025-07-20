@@ -15,4 +15,7 @@ public class SolicitudByIdResponseDto {
     private Estado estado;
     private Integer usuarioId;
     private String ordenCompra;
+    private String motivo;
+    private String familia;
+    private String subFamilia;
 }

@@ -37,13 +37,17 @@ public class SolicitudesService {
                 .moneda(dto.getMoneda())
                 .estado(Estado.Pendiente)
                 .usuario(usuario)
+                .Motivo(dto.getMotivo())
+                .Familia(dto.getFamilia())
+                .SubFamilia(dto.getSubFamilia())
                 .imageData(dto.getImageData())
                 .build();
+        solicitud = solicitudRepository.save(solicitud);
+
         Area areaDestino = determinarAreaDestino(solicitud);
 
         enviarNotificacionAUsuario(areaDestino.getJefe(), solicitud);
 
-        solicitud = solicitudRepository.save(solicitud);
         return solicitud;
     }
 
@@ -75,6 +79,9 @@ public class SolicitudesService {
         dto.setMoneda(solicitud.getMoneda());
         dto.setEstado(solicitud.getEstado());
         dto.setUsuarioId(solicitud.getUsuario().getId());
+        dto.setMotivo(solicitud.getMotivo());
+        dto.setFamilia(solicitud.getFamilia());
+        dto.setSubFamilia(solicitud.getSubFamilia());
         return dto;
     }
     public Solicitudes actualizarSolicitud(Integer id, SolicitudRequestDto dto) {
@@ -92,6 +99,8 @@ public class SolicitudesService {
         if (dto.getMoneda() != null) solicitud.setMoneda(dto.getMoneda());
         if (dto.getEstado() != null) solicitud.setEstado(dto.getEstado());
         if (dto.getImageData() != null) solicitud.setImageData(dto.getImageData());
+        if (dto.getFamilia() != null) solicitud.setFamilia(dto.getFamilia());
+        if (dto.getSubFamilia() != null) solicitud.setSubFamilia(dto.getSubFamilia());
         if (dto.getUsuarioId() != null) {
             User usuario = userRepository.findById(dto.getUsuarioId())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
