@@ -58,6 +58,12 @@ public class Solicitudes {
     @Column(nullable = false)
     String SubFamilia;
 
+    @Column(nullable = true)
+    String Comentario;
+
+    @Column(nullable = false)
+    String Fecha;
+
     @Lob
     @Column(nullable = true)
     private byte[] imageData;

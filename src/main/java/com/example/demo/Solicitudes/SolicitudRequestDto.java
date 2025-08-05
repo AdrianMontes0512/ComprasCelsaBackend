@@ -24,4 +24,6 @@ public class SolicitudRequestDto {
     private String motivo;
     private String familia;
     private String subFamilia;
+    private String Comentarios;
+    private String Fecha;
 }

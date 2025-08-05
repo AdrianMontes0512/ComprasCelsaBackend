@@ -97,6 +97,8 @@ public class SolicitudesService {
         if (dto.getPrecio() != null) solicitud.setPrecio(dto.getPrecio());
         if (dto.getUmedida() != null) solicitud.setUmedida(dto.getUmedida());
         if (dto.getMoneda() != null) solicitud.setMoneda(dto.getMoneda());
+        if (dto.getComentarios() != null) solicitud.setComentario(dto.getComentarios());
+        if (dto.getFecha() != null) solicitud.setFecha(dto.getFecha());
         if (dto.getEstado() != null) solicitud.setEstado(dto.getEstado());
         if (dto.getImageData() != null) solicitud.setImageData(dto.getImageData());
         if (dto.getFamilia() != null) solicitud.setFamilia(dto.getFamilia());
