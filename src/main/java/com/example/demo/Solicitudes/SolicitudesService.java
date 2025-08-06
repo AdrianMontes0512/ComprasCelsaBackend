@@ -82,6 +82,8 @@ public class SolicitudesService {
         dto.setMotivo(solicitud.getMotivo());
         dto.setFamilia(solicitud.getFamilia());
         dto.setSubFamilia(solicitud.getSubFamilia());
+        dto.setComentarios(solicitud.getComentario()); // <-- Agrega esto
+        dto.setFecha(solicitud.getFecha());            // <-- Y esto
         return dto;
     }
     public Solicitudes actualizarSolicitud(Integer id, SolicitudRequestDto dto) {

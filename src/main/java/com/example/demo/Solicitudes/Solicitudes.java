@@ -61,7 +61,7 @@ public class Solicitudes {
     @Column(nullable = true)
     String Comentario;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     String Fecha;
 
     @Lob

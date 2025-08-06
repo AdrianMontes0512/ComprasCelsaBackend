@@ -18,4 +18,6 @@ public class SolicitudByIdResponseDto {
     private String motivo;
     private String familia;
     private String subFamilia;
+    private String comentarios;
+    private String fecha;
 }
