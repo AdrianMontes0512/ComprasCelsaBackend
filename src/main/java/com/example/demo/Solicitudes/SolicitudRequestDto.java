@@ -26,4 +26,5 @@ public class SolicitudRequestDto {
     private String subFamilia;
     private String Comentarios;
     private String Fecha;
+    private String maquina;
 }

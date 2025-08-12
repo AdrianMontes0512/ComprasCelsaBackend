@@ -20,4 +20,5 @@ public class SolicitudByIdResponseDto {
     private String subFamilia;
     private String comentarios;
     private String fecha;
+    private String maquina;
 }

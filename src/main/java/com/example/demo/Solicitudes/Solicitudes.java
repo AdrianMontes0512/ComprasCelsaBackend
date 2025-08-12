@@ -19,6 +19,9 @@ public class Solicitudes {
     @GeneratedValue
     Integer id;
 
+    @Column(nullable = true)
+    String maquina;
+
     @Column(nullable = false)
     String CentroCosto;
 

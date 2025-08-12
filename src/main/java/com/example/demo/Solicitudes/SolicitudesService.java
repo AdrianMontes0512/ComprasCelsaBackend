@@ -40,6 +40,7 @@ public class SolicitudesService {
                 .Motivo(dto.getMotivo())
                 .Familia(dto.getFamilia())
                 .SubFamilia(dto.getSubFamilia())
+                .maquina(dto.getMaquina())
                 .imageData(dto.getImageData())
                 .build();
         solicitud = solicitudRepository.save(solicitud);
@@ -72,6 +73,7 @@ public class SolicitudesService {
         dto.setId(solicitud.getId());
         dto.setPrioridad(solicitud.getPrioridad());
         dto.setSp(solicitud.getSp());
+        dto.setMaquina(String.valueOf(solicitud.getMaquina()));
         dto.setDescripcion(solicitud.getDescripcion());
         dto.setCantidad(solicitud.getCantidad());
         dto.setPrecio(solicitud.getPrecio());
@@ -105,6 +107,7 @@ public class SolicitudesService {
         if (dto.getImageData() != null) solicitud.setImageData(dto.getImageData());
         if (dto.getFamilia() != null) solicitud.setFamilia(dto.getFamilia());
         if (dto.getSubFamilia() != null) solicitud.setSubFamilia(dto.getSubFamilia());
+        if (dto.getMaquina() != null) solicitud.setMaquina(dto.getMaquina());
         if (dto.getUsuarioId() != null) {
             User usuario = userRepository.findById(dto.getUsuarioId())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
