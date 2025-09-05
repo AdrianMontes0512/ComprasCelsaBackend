@@ -21,4 +21,6 @@ public class SolicitudByIdResponseDto {
     private String comentarios;
     private String fecha;
     private String maquina;
+    private String fechaOrden;
+    private Status status;
 }

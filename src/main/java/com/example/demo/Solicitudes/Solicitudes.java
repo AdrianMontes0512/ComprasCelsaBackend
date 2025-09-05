@@ -67,6 +67,12 @@ public class Solicitudes {
     @Column(nullable = true)
     String Fecha;
 
+    @Column(nullable = true)
+    Status Status;
+
+    @Column(nullable = true)
+    String FechaOrden;
+
     @Lob
     @Column(nullable = true)
     private byte[] imageData;

@@ -84,8 +84,11 @@ public class SolicitudesService {
         dto.setMotivo(solicitud.getMotivo());
         dto.setFamilia(solicitud.getFamilia());
         dto.setSubFamilia(solicitud.getSubFamilia());
-        dto.setComentarios(solicitud.getComentario()); // <-- Agrega esto
-        dto.setFecha(solicitud.getFecha());            // <-- Y esto
+        dto.setComentarios(solicitud.getComentario());
+        dto.setFecha(solicitud.getFecha());
+        dto.setfechaOrden(solicitud.getFechaOrden());
+        dto.setStatus(solicitud.getStatus());
+        dto.setOrdenCompra(solicitud.getOrdenCompra());// esta linea no estaba y se agrego pq no se podia obtener desde la base de datos la informacion de orden de compra
         return dto;
     }
     public Solicitudes actualizarSolicitud(Integer id, SolicitudRequestDto dto) {
@@ -93,6 +96,9 @@ public class SolicitudesService {
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
         if (dto.getOrdenCompra() != null) solicitud.setOrdenCompra(dto.getOrdenCompra());
+        if (dto.getMotivo() != null) solicitud.setMotivo(dto.getMotivo());
+        if (dto,getFechaOrden() != null) solicitud.setFechaOrden(dto.getFechaOrden());
+        if (dto.getStatus() != null) solicitud.setStatus(dto.getStatus());
         if (dto.getCentrocosto() != null) solicitud.setCentroCosto(dto.getCentrocosto());
         if (dto.getPrioridad() != null) solicitud.setPrioridad(dto.getPrioridad());
         if (dto.getSp() != null) solicitud.setSp(dto.getSp());
