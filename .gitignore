@@ -1,0 +1,29 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# Logs
+*.log
+
+# Secrets / env
+.env
+.env.local
+.env.*.local
+env.production.yaml
+
+# Postgres data volume
+postgres-data/
+
+# OS
+.DS_Store
+Thumbs.db

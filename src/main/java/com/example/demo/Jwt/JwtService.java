@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,21 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY="586E3272357538782F413F4428472B4B6250655368566B597033733676397924";
+    @Value("${jwt.secret:}")
+    private String secretKey;
+
+    @PostConstruct
+    void validate() {
+        if (secretKey == null || secretKey.isBlank()) {
+            throw new IllegalStateException(
+                "JWT_SECRET no está configurado. Setea la env var JWT_SECRET (hex de 256 bits, ej: openssl rand -hex 32).");
+        }
+    }
 
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
@@ -36,7 +48,7 @@ public class JwtService {
     }
 
     private Key getKey() {
-       byte[] keyBytes=Decoders.BASE64.decode(SECRET_KEY);
+       byte[] keyBytes=Decoders.BASE64.decode(secretKey);
        return Keys.hmacShaKeyFor(keyBytes);
     }
 

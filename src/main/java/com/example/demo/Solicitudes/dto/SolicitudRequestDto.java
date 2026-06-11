@@ -16,6 +16,8 @@ public class SolicitudRequestDto {
     private Estado estado;
     private Integer usuarioId;
     private byte[] imageData;
+    private String imageMimeType;
+    private String imageFilename;
     private String ordenCompra="";
     private String motivo;
     private String familia;

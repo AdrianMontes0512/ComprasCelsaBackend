@@ -1,0 +1,15 @@
+target/
+.idea/
+.vscode/
+.git/
+.gitignore
+.env
+.env.local
+env.production.yaml
+env.production.example.yaml
+deploy.sh
+*.log
+postgres-data/
+README.md
+DEPLOY.md
+HELP.md

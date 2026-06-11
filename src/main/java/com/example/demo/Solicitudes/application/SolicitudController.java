@@ -1,6 +1,5 @@
 package com.example.demo.Solicitudes.application;
 
-import com.example.demo.Areas.domain.Area;
 import com.example.demo.Solicitudes.infraestrucutre.SolicitudRepository;
 import com.example.demo.Solicitudes.dto.SolicitudRequestDto;
 import com.example.demo.Solicitudes.domain.Solicitudes;
@@ -9,19 +8,16 @@ import com.example.demo.Solicitudes.dto.SolicitudByIdResponseDto;
 import com.example.demo.User.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-@CrossOrigin(origins = "http://localhost:5173") // or "*" for all origins (not recommended for production)
 @RestController
 @RequestMapping("/solicitudes")
 @RequiredArgsConstructor
@@ -31,6 +27,7 @@ public class SolicitudController {
     private final SolicitudRepository solicitudRepository;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('Empleado','TMLIMA')")
     public ResponseEntity<?> crearSolicitud(@RequestBody SolicitudRequestDto dto) {
         Solicitudes solicitud = solicitudesService.crearSolicitud(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitud);
@@ -38,18 +35,31 @@ public class SolicitudController {
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<Page<SolicitudByIdResponseDto>> getSolicitudesByUsuarioId(
             @PathVariable Integer usuarioId,
-            @PageableDefault(size = 3) Pageable pageable) {
-        Page<SolicitudByIdResponseDto> solicitudes = solicitudesService.getSolicitudesByUsuarioId(usuarioId, pageable);
-        return ResponseEntity.ok(solicitudes);
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.Prioridad prioridad,
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.SP sp,
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.Estado estado,
+            @RequestParam(required = false) String idQuery,
+            @RequestParam(required = false) String descripcionQuery,
+            @PageableDefault(size = 12, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(solicitudesService.searchSolicitudesByUsuario(
+                usuarioId, prioridad, sp, estado, idQuery, descripcionQuery, pageable));
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getSolicitudById(@PathVariable Integer id) {
         return ResponseEntity.ok(solicitudesService.getSolicitudById(id));
     }
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('Compras','ADMIN')")
     public ResponseEntity<Page<SolicitudByIdResponseDto>> obtenerTodasLasSolicitudes(
-            @PageableDefault(size = 14) Pageable pageable) {
-        return ResponseEntity.ok(solicitudesService.getTodasLasSolicitudes(pageable));
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.Prioridad prioridad,
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.SP sp,
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.Estado estado,
+            @RequestParam(required = false) String idQuery,
+            @RequestParam(required = false) String usuarioQuery,
+            @RequestParam(required = false) String descripcionQuery,
+            @PageableDefault(size = 14, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(solicitudesService.searchSolicitudes(
+                prioridad, sp, estado, idQuery, usuarioQuery, descripcionQuery, pageable));
     }
     @GetMapping("/imagen/{id}")
     public ResponseEntity<byte[]> descargarImagen(@PathVariable Integer id) {
@@ -61,31 +71,43 @@ public class SolicitudController {
             return ResponseEntity.notFound().build();
         }
 
+        String mime = solicitud.getImageMimeType();
+        if (mime == null || mime.isBlank()) mime = "application/octet-stream";
+        String filename = solicitud.getImageFilename();
+        if (filename == null || filename.isBlank()) filename = "adjunto-" + id;
+        // sanitize filename (avoid quotes / line breaks injection in header)
+        filename = filename.replaceAll("[\\r\\n\"]", "_");
+
         return ResponseEntity.ok()
-                .header("Content-Type", "image/png") // Change if needed
-                .header("Content-Disposition", "attachment; filename=\"imagen.png\"")
+                .header("Content-Type", mime)
+                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
                 .body(imageData);
     }
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('JefeArea','Compras','ADMIN')")
     public ResponseEntity<?> actualizarSolicitud(@PathVariable Integer id, @RequestBody SolicitudRequestDto dto) {
         return ResponseEntity.ok(solicitudesService.actualizarSolicitud(id, dto));
     }
     @GetMapping("/jefe")
+    @PreAuthorize("hasAuthority('JefeArea')")
     public ResponseEntity<Page<SolicitudByIdResponseDto>> obtenerSolicitudesJefe(
             @AuthenticationPrincipal User jefe,
-            @PageableDefault(size = 14) Pageable pageable) {
-        Page<Solicitudes> todasLasSolicitudes = solicitudRepository.findAll(pageable);
-        List<SolicitudByIdResponseDto> solicitudesFiltradas = new ArrayList<>();
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.Prioridad prioridad,
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.SP sp,
+            @RequestParam(required = false) com.example.demo.Solicitudes.domain.Estado estado,
+            @RequestParam(required = false) String idQuery,
+            @RequestParam(required = false) String usuarioQuery,
+            @RequestParam(required = false) String descripcionQuery,
+            @PageableDefault(size = 14, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(solicitudesService.searchSolicitudesByJefe(
+                jefe.getId(), prioridad, sp, estado, idQuery, usuarioQuery, descripcionQuery, pageable));
+    }
 
-        for (Solicitudes solicitud : todasLasSolicitudes.getContent()) {
-            Area areaDestino = solicitudesService.determinarAreaDestino(solicitud);
-            if (areaDestino.getJefe() != null && areaDestino.getJefe().getId().equals(jefe.getId())) {
-                solicitudesFiltradas.add(solicitudesService.getSolicitudById(solicitud.getId()));
-            }
-        }
-        Page<SolicitudByIdResponseDto> solicitudesPaginadas = new PageImpl<>(
-                solicitudesFiltradas, pageable, todasLasSolicitudes.getTotalElements());
-        return ResponseEntity.ok(solicitudesPaginadas);
+    @GetMapping("/actividad-reciente")
+    public ResponseEntity<java.util.List<com.example.demo.Solicitudes.dto.ActividadRecienteDto>> actividadReciente(
+            @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "10") int limit) {
+        return ResponseEntity.ok(solicitudesService.getActividadReciente(user, Math.min(limit, 50)));
     }
 
 }

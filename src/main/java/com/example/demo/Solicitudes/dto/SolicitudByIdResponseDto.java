@@ -8,6 +8,8 @@ import com.example.demo.Solicitudes.domain.Moneda;
 import com.example.demo.Solicitudes.domain.Prioridad;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 public class SolicitudByIdResponseDto {
     private Integer id;
@@ -28,5 +30,11 @@ public class SolicitudByIdResponseDto {
     private String fecha;
     private String maquina;
     private String fechaOrden;
+    private String fechaAprobacion;
     private Status status;
+    private Instant createdAt;
+    private Instant approvedAt;
+    private Instant ocAssignedAt;
+    private Long tiempoAprobacionHoras;
+    private Long tiempoOCHoras;
 }

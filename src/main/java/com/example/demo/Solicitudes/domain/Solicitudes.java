@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -72,9 +74,27 @@ public class Solicitudes {
     @Column(nullable = true)
     String FechaOrden;
 
+    @Column(nullable = true)
+    String FechaAprobacion;
+
     @Lob
     @Column(nullable = true)
     private byte[] imageData;
+
+    @Column(nullable = true)
+    private String imageMimeType;
+
+    @Column(nullable = true)
+    private String imageFilename;
+
+    @Column(nullable = true, updatable = false)
+    private Instant createdAt;
+
+    @Column(nullable = true)
+    private Instant approvedAt;
+
+    @Column(nullable = true)
+    private Instant ocAssignedAt;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
